@@ -1,0 +1,9 @@
+---
+- name: create dnsmasq configuration
+  template:
+    src: dnsmasq.j2.conf
+    dest: /etc/dnsmasq.d/{{ os_cluster_name }}.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: restart dnsmasq

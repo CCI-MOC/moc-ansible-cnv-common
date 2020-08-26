@@ -1,0 +1,21 @@
+---
+namespace: moc
+name: cnv_common
+version: 1.0.0
+readme: README.md
+authors:
+  - Lars Kellogg-Stedman <lars@redhat.com>
+
+
+description: >-
+  Roles and other artifacts for managing MOC openshift + cnv clusters
+
+license:
+  - GPL-2.0-or-later
+
+tags:
+  - openshift
+  - moc
+
+repository: https://gitlab.com/open-infrastructure-labs/moc-ansible-cnv-common
+issues: https://gitlab.com/larsks/moc-ansible-cnv-common/-/issues
