@@ -1,0 +1,32 @@
+---
+name: 'Run tests'
+
+on:
+  push:
+
+jobs:
+  molecule:
+    name: Run molecule tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: ansible_collections/moc/cnv_common
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Install python dependencies
+        run: |
+          pip install -U ansible
+          pip install molecule netaddr
+
+      - name: Run molecule
+        run: |
+          cd ansible_collections/moc/cnv_common
+          chmod 600 molecule/default/molecule-test-image/molecule_rsa
+          molecule --version
+          molecule test
