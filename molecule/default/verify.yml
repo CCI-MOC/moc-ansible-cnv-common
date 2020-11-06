@@ -1,0 +1,62 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: dnsmasq
+  gather_facts: false
+  tasks:
+    - name: get conf file filesystem metadata
+      stat:
+        path: /etc/dnsmasq.d/{{ os_cluster_name }}.conf
+      register: stat
+
+    - name: verify that file exists
+      assert:
+        that: stat.stat.exists
+
+    - name: get conf file content
+      command: >-
+        cat /etc/dnsmasq.d/{{ os_cluster_name }}.conf
+      register: content
+
+    - name: verify vip host records
+      assert:
+        that: item in content.stdout_lines
+      loop:
+        - "host-record=api.{{ os_base_domain }},{{ os_vip_api }}"
+        - "host-record=ns1.{{ os_base_domain }},{{ os_vip_dns }}"
+        - "host-record=lb.{{ os_base_domain }},{{ os_vip_ingress }}"
+
+    - name: verify node host records
+      assert:
+        that: >-
+          'host-record={},{}'.format(
+            hostvars[item].baremetal_ip|ipv4('address'),
+            item
+          )
+          in content.stdout_lines
+      loop: "{{ groups.workers }}"
+
+    - name: verify ipmi host records
+      assert:
+        that: >-
+          'host-record={},{}-ipmi.{}'.format(
+            hostvars[item].ipmi_host,
+            item,
+            os_base_domain
+          )
+          in content.stdout_lines
+      loop: "{{ groups.workers }}"
+
+    - name: verify node dhcp records
+      debug:
+        msg: >-
+          {{
+          'dhcp-host={},{},set:{}.{},24h'.format(
+            hostvars[item].baremetal_mac,
+            hostvars[item].baremetal_ip|ipv4('address'),
+            os_cluster_name,
+            item
+          )
+          }}
+      loop: "{{ groups.workers }}"

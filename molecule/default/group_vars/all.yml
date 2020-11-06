@@ -1,0 +1,9 @@
+---
+os_cluster_name: molecule-test
+os_base_domain: example.com
+
+os_vip_api: 1.1.1.1
+os_vip_dns: 1.1.1.2
+os_vip_ingress: 1.1.1.3
+
+manage_services: false

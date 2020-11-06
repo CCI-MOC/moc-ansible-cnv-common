@@ -1,0 +1,19 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: delegated
+platforms:
+  - name: instance
+    groups:
+      - dnsmasq
+  - name: worker0
+    groups:
+      - workers
+  - name: worker1
+    groups:
+      - workers
+provisioner:
+  name: ansible
+verifier:
+  name: ansible
