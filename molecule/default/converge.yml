@@ -2,9 +2,5 @@
 - name: Converge
   hosts: dnsmasq
   tasks:
-    - file:
-        path: /etc/dnsmasq.d
-        state: directory
-
     - include_role:
         name: dnsmasq
