@@ -7,13 +7,35 @@ platforms:
   - name: instance
     groups:
       - dnsmasq
-  - name: worker0
-    groups:
-      - workers
-  - name: worker1
-    groups:
-      - workers
 provisioner:
   name: ansible
+  playbooks:
+    prepare: prepare.yml
+  inventory:
+    hosts:
+      all:
+        vars:
+          os_cluster_name: molecule-test
+          os_base_domain: example.com
+          os_vip_api: 1.1.1.1
+          os_vip_dns: 1.1.1.2
+          os_vip_ingress: 1.1.1.3
+          manage_services: false
+        children:
+          workers:
+            vars:
+              manage_dns: true
+            hosts:
+              worker0:
+                baremetal_ip: 10.0.0.10/24
+                baremetal_mac: c0:ff:ee:00:00:10
+                ipmi_host: 10.1.0.10
+              worker1:
+                baremetal_ip: 10.0.0.11/24
+                baremetal_mac: c0:ff:ee:00:00:11
+                ipmi_host: 10.1.0.11
+
+manage_services: false
+
 verifier:
   name: ansible

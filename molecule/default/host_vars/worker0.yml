@@ -1,4 +1,0 @@
----
-baremetal_ip: 10.0.0.10/24
-baremetal_mac: c0:ff:ee:00:00:10
-ipmi_host: 10.1.0.10
