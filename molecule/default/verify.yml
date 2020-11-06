@@ -49,14 +49,13 @@
       loop: "{{ groups.workers }}"
 
     - name: verify node dhcp records
-      debug:
-        msg: >-
-          {{
-          'dhcp-host={},{},set:{}.{},24h'.format(
+      assert:
+        that: >-
+          'dhcp-host={},{},set:{},{},24h'.format(
             hostvars[item].baremetal_mac,
             hostvars[item].baremetal_ip|ipv4('address'),
             os_cluster_name,
             item
           )
-          }}
+          in content.stdout_lines
       loop: "{{ groups.workers }}"
